@@ -10,7 +10,7 @@
 	# you'll need to modify this if you're serving over HTTPS or on a weird port
 	$self_url = 'http://'.$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'];
 
-	$guid_base = "{$realm}-{$char}-";
+	$guid_base = StrToLower($realm).'-'.StrToLower($char).'-';
 
 	$url = "http://us.battle.net/api/wow/character/{$realm}/{$char}?fields=feed";
 	$profile_url = "http://us.battle.net/wow/en/character/{$realm}/{$char}/";
@@ -29,7 +29,7 @@
 
 		$item = array();
 		$item['ts'] = substr($row['timestamp'], 0, -3);
-		$item['guid'] = $guid_base.$row['timestamp'];
+		$item['guid'] = $guid_base.$row['timestamp'].'-'.StrToLower($row['type']).'-';
 
 		if ($row['type'] == 'ACHIEVEMENT'){
 
@@ -37,6 +37,7 @@
 
 			$item['url'] = "http://www.wowhead.com/achievement={$row['achievement']['id']}";
 			$item['text'] = "{$name} earned the achievement <a href=\"{$item['url']}\">$title</a>";
+			$item['guid'] .= $row['achievement']['id'];
 
 			if ($row['achievement']['points']) $item['text'] .= " for {$row['achievement']['points']} points";
 
@@ -46,6 +47,7 @@
 
 			$item['url'] = "http://www.wowhead.com/achievement={$row['achievement']['id']}";
 			$item['text'] = "{$name} got {$row['quantity']} {$title}";
+			$item['guid'] .= $row['achievement']['id'];
 
 		}elseif ($row['type'] == 'CRITERIA'){
 
@@ -54,6 +56,7 @@
 
 			$item['url'] = "http://www.wowhead.com/achievement={$row['achievement']['id']}";
 			$item['text'] = "{$name} completed step {$step} of achievement <a href=\"{$item['url']}\">$title</a>";
+			$item['guid'] .= $row['achievement']['id'];
 
 		}elseif ($row['type'] == 'LOOT'){
 
@@ -61,6 +64,7 @@
 
 			$item['url'] = "http://www.wowhead.com/item={$row['itemId']}";
 			$item['text'] = "{$name} obtained <a href=\"{$item['url']}\">{$title}</a>";
+			$item['guid'] .= $row['itemId'];
 
 		}else{
 
