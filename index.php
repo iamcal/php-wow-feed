@@ -20,7 +20,7 @@
 
 	$html_realm = HtmlSpecialChars($data['realm']);
 	$html_name = HtmlSpecialChars($data['name']);
-	$name = "<a href=\"us.battle.net/wow/en/character/{$html_realm}/{$html_name}/\">{$html_name}</a>";
+	$name = "<a href=\"http://us.battle.net/wow/en/character/{$html_realm}/{$html_name}/\">{$html_name}</a>";
 
 	foreach ($data['feed'] as $row){
 
