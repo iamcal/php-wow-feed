@@ -33,7 +33,7 @@
 			$title = HtmlSpecialChars($row['achievement']['title']);
 
 			$item['url'] = "http://www.wowhead.com/achievement={$row['achievement']['id']}";
-			$item['text'] = "{$name} earned the achievement <a href=\"{item['$url']}\">$title</a>";
+			$item['text'] = "{$name} earned the achievement <a href=\"{$item['url']}\">$title</a>";
 
 			if ($row['achievement']['points']) $item['text'] .= " for {$row['achievement']['points']} points";
 
