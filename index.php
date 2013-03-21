@@ -7,6 +7,9 @@
 	$realm = $_GET['r'] ? $_GET['r'] : 'hyjal';
 	$char = $_GET['n'] ? $_GET['n'] : 'bees';
 
+	# you'll need to modify this if you're serving over HTTPS or on a weird port
+	$self_url = 'http://'.$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'];
+
 	$guid_base = "{$realm}-{$char}-";
 
 	$url = "http://us.battle.net/api/wow/character/{$realm}/{$char}?fields=feed";
@@ -73,7 +76,7 @@
 
 	echo '<'.'?xml version="1.0" encoding="UTF-8" ?'.">\n";
 ?>
-<rss version="2.0">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 <channel>
 	<title><? echo HtmlSpecialChars($char); ?></title>
 	<description>WoW event feed for <?php echo HtmlSpecialChars($char); ?></description>
@@ -81,6 +84,7 @@
 	<lastBuildDate><?php echo gmdate('r'); ?></lastBuildDate>
 	<pubDate><?php echo gmdate('r'); ?></pubDate>
 	<ttl>1800</ttl>
+	<atom:link href="<?php echo HtmlSpecialChars($self_url); ?>" rel="self" type="application/rss+xml" />
 
 <?php foreach ($items as $item){ ?>
 	<item>
