@@ -87,7 +87,7 @@
 		<title><?php echo date('g:ia, D M jS', $item['ts']); ?></title>
 		<description><?php echo HtmlSpecialChars($item['text']); ?></description>
 		<link><?php echo HtmlSpecialChars($item['url']); ?></link>
-		<guid><?php echo $item['guid']; ?></guid>
+		<guid isPermaLink="false"><?php echo $item['guid']; ?></guid>
 		<pubDate><?php echo gmdate('r', $item['ts']); ?></pubDate>
 	</item>
 <?php } ?>
