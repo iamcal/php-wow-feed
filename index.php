@@ -2,7 +2,7 @@
 	putenv('TZ=PST8PDT');
 	date_default_timezone_set('America/Los_Angeles');
 
-	load_item_cache();
+	load_cache();
 
 	$realm = $_GET['r'] ? $_GET['r'] : 'hyjal';
 	$char = $_GET['n'] ? $_GET['n'] : 'bees';
@@ -15,8 +15,7 @@
 	$url = "http://us.battle.net/api/wow/character/{$realm}/{$char}?fields=feed";
 	$profile_url = "http://us.battle.net/wow/en/character/{$realm}/{$char}/";
 
-	$data = file_get_contents($url);
-	$data = json_decode($data, true);
+	$data = get_feed($url);
 
 
 	$items = array();
@@ -106,6 +105,7 @@
 
 <?php
 
+	######################
 
 	function get_item_name($id){
 
@@ -122,24 +122,58 @@
 		return $GLOBALS['item_cache'][$id]['name'];
 	}
 
-	function load_item_cache(){
+	function get_feed($url){
 
-		$GLOBALS['item_cache_file'] = dirname(__FILE__).'/item_cache.json';
+		$cached = $GLOBALS['feed_cache'][$url];
 
-		$GLOBALS['item_cache'] = array();
-
-		if (file_exists($GLOBALS['item_cache_file'])){
-			$data = file_get_contents($GLOBALS['item_cache_file']);
-			$data = json_decode($data, true);
-			$GLOBALS['item_cache'] = $data;
+		if ($cached['ts']){
+			$age = time() - $cached['ts'];
+			if ($age < 60 * 60) return $cached['data'];
 		}
 
-		register_shutdown_function('save_item_cache');
+		$data = file_get_contents($url);
+		$data = json_decode($data, true);
+
+		$GLOBALS['feed_cache'][$url] = array(
+			'ts'	=> time(),
+			'data'	=> $data,
+		);
+
+		return $data;
 	}
 
-	function save_item_cache(){
+	######################
 
-		$fh = fopen($GLOBALS['item_cache_file'], 'w');
-		fwrite($fh, json_encode($GLOBALS['item_cache']));
-		fclose($fh);
+	function load_cache(){
+
+		$GLOBALS['cache_files'] = array(
+			'item_cache',
+			'feed_cache',
+		);
+
+		$GLOBALS['cache_filenames'] = array();
+
+		foreach ($GLOBALS['cache_files'] as $file){
+
+			$GLOBALS['cache_filenames'][$file] = dirname(__FILE__)."/{$file}.json";
+			$GLOBALS[$file] = array();
+
+			if (file_exists($GLOBALS['cache_filenames'][$file])){
+				$data = file_get_contents($GLOBALS['cache_filenames'][$file]);
+				$data = json_decode($data, true);
+				$GLOBALS[$file] = $data;
+			}
+		}
+
+		register_shutdown_function('save_cache');
+	}
+
+	function save_cache(){
+
+		foreach ($GLOBALS['cache_files'] as $file){
+
+			$fh = fopen($GLOBALS['cache_filenames'][$file], 'w');
+			fwrite($fh, json_encode($GLOBALS[$file]));
+			fclose($fh);
+		}
 	}
