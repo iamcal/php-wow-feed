@@ -1,4 +1,6 @@
 <?php
+	define('OPT_EXCLUDE_PROGRESS', 1);
+
 	putenv('TZ=PST8PDT');
 	date_default_timezone_set('America/Los_Angeles');
 
@@ -49,6 +51,8 @@
 			$item['guid'] .= $row['achievement']['id'];
 
 		}elseif ($row['type'] == 'CRITERIA'){
+
+			if (OPT_EXCLUDE_PROGRESS) continue;
 
 			$step = HtmlSpecialChars($row['criteria']['description']);
 			$title = HtmlSpecialChars($row['achievement']['title']);
