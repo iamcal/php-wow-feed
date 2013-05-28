@@ -63,7 +63,10 @@
 
 		}elseif ($row['type'] == 'LOOT'){
 
-			$title = HtmlSpecialChars(get_item_name($row['itemId']));
+			$item = get_item($row['itemId']);
+			if ($item['itemLevel'] < 400 && $item['itemLevel'] > 10) continue;
+
+			$title = HtmlSpecialChars($item['name']);
 
 			$item['url'] = "http://www.wowhead.com/item={$row['itemId']}";
 			$item['text'] = "{$name} obtained <a href=\"{$item['url']}\">{$title}</a>";
@@ -111,7 +114,7 @@
 
 	######################
 
-	function get_item_name($id){
+	function get_item($id){
 
 		if (!$GLOBALS['item_cache'][$id]){
 
@@ -123,7 +126,7 @@
 			$GLOBALS['item_cache'][$id] = $data;
 		}
 
-		return $GLOBALS['item_cache'][$id]['name'];
+		return $GLOBALS['item_cache'][$id];
 	}
 
 	function get_feed($url){
