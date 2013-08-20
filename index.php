@@ -120,7 +120,7 @@
 
 			$url = "http://us.battle.net/api/wow/item/{$id}";
 
-			$data = file_get_contents($url);
+			$data = @file_get_contents($url);
 			$data = json_decode($data, true);
 
 			$GLOBALS['item_cache'][$id] = $data;
