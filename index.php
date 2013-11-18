@@ -19,7 +19,6 @@
 
 	$data = get_feed($url);
 
-
 	$items = array();
 
 	$html_realm = HtmlSpecialChars($data['realm']);
@@ -63,13 +62,13 @@
 
 		}elseif ($row['type'] == 'LOOT'){
 
-			$item = get_item($row['itemId']);
-			if ($item['itemLevel'] < 400 && $item['itemLevel'] > 10) continue;
+			$loot_item = get_item($row['itemId']);
+			if ($loot_item['itemLevel'] < 400 && $loot_item['itemLevel'] > 10) continue;
 
-			$title = HtmlSpecialChars($item['name']);
+			$title = HtmlSpecialChars($loot_item['name']);
 
 			$item['url'] = "http://www.wowhead.com/item={$row['itemId']}";
-			$item['text'] = "{$name} obtained <a href=\"{$item['url']}\">{$title}</a>";
+			$item['text'] = "{$name} obtained <a href=\"{$loot_item['url']}\">{$title}</a>";
 			$item['guid'] .= $row['itemId'];
 
 		}else{
