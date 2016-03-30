@@ -4,6 +4,8 @@
 	putenv('TZ=PST8PDT');
 	date_default_timezone_set('America/Los_Angeles');
 
+	include('config.php');
+
 	load_cache();
 
 	$realm = $_GET['r'] ? $_GET['r'] : 'hyjal';
@@ -63,7 +65,7 @@
 		}elseif ($row['type'] == 'LOOT'){
 
 			$loot_item = get_item($row['itemId']);
-			if ($loot_item['itemLevel'] < 400 && $loot_item['itemLevel'] > 10) continue;
+			if ($loot_item['itemLevel'] < 400 && $loot_item['itemLevel'] > 10 && !$_GET['all_items']) continue;
 
 			$title = HtmlSpecialChars($loot_item['name']);
 
@@ -114,6 +116,8 @@
 	######################
 
 	function get_item($id){
+
+		global $blizzard_api_region, $blizzard_api_key;
 
 		if (!$GLOBALS['item_cache'][$id]){
 
