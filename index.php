@@ -14,8 +14,8 @@
 
 	$guid_base = StrToLower($realm).'-'.StrToLower($char).'-';
 
-	$url = "http://us.battle.net/api/wow/character/{$realm}/{$char}?fields=feed";
-	$profile_url = "http://us.battle.net/wow/en/character/{$realm}/{$char}/";
+	$url = "https://{$blizzard_api_region}.api.battle.net/wow/character/{$realm}/{$char}?apikey={$blizzard_api_key}&fields=feed";
+	$profile_url = "http://{$blizzard_api_region}.battle.net/wow/en/character/{$realm}/{$char}/";
 
 	$data = get_feed($url);
 
@@ -23,7 +23,7 @@
 
 	$html_realm = HtmlSpecialChars($data['realm']);
 	$html_name = HtmlSpecialChars($data['name']);
-	$name = "<a href=\"http://us.battle.net/wow/en/character/{$html_realm}/{$html_name}/\">{$html_name}</a>";
+	$name = "<a href=\"http://{$blizzard_api_region}.battle.net/wow/en/character/{$html_realm}/{$html_name}/\">{$html_name}</a>";
 
 	foreach ($data['feed'] as $row){
 
@@ -117,7 +117,7 @@
 
 		if (!$GLOBALS['item_cache'][$id]){
 
-			$url = "http://us.battle.net/api/wow/item/{$id}";
+			$url = "http://{$blizzard_api_region}.battle.net/api/wow/item/{$id}";
 
 			$data = @file_get_contents($url);
 			$data = json_decode($data, true);
