@@ -117,7 +117,7 @@
 
 		if (!$GLOBALS['item_cache'][$id]){
 
-			$url = "http://{$blizzard_api_region}.battle.net/api/wow/item/{$id}";
+			$url = "https://{$blizzard_api_region}.api.battle.net/wow/item/{$id}?apikey={$blizzard_api_key}";
 
 			$data = @file_get_contents($url);
 			$data = json_decode($data, true);
