@@ -10,6 +10,7 @@
 
 	$realm = $_GET['r'] ? $_GET['r'] : 'hyjal';
 	$char = $_GET['n'] ? $_GET['n'] : 'bees';
+	$min_item_ilvl = 851;
 
 	# you'll need to modify this if you're serving over HTTPS or on a weird port
 	$self_url = 'http://'.$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'];
@@ -65,7 +66,7 @@
 		}elseif ($row['type'] == 'LOOT'){
 
 			$loot_item = get_item($row['itemId']);
-			if ($loot_item['itemLevel'] < 400 && $loot_item['itemLevel'] > 10 && !$_GET['all_items']) continue;
+			if ($loot_item['itemLevel'] < $min_item_ilvl && $loot_item['itemLevel'] > 10 && !$_GET['all_items']) continue;
 
 			$title = HtmlSpecialChars($loot_item['name']);
 
